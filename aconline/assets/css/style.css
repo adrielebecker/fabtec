@@ -1,0 +1,141 @@
+/* Custom Stylesheet */
+/**
+ * Use this file to override Materialize files so you can update
+ * the core Materialize files in the future
+ *
+ * Made By MaterializeCSS.com
+ */
+
+ @import url('https://fonts.googleapis.com/css?family=Comfortaa:400,600,700&display=swap&subset=latin-ext');
+
+ input, input [type="text"], input [type="number"], .input-field, .btn {
+ 	font-family: 'Comfortaa';
+ }
+
+textarea {
+	font-family: 'Comfortaa';
+	padding: .5rem .5rem .5rem .5rem;
+}
+
+.span_op {
+	width: 100%;
+}
+
+ body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+
+  main {
+    flex: 1 0 auto;
+  }
+
+  .painel-de-controle {
+  	min-height: 100vh;
+  }
+
+  .footer-image {
+  	width: 12.5rem;
+  }
+
+ .descricao {
+ 	font-size: 1.5rem;
+ 	font-weight: 300;
+ }
+
+.nav-logo {
+	width: 200px;
+	text-decoration: none; 
+}
+
+.link-logo:hover {
+	text-decoration: none;
+	background-color: transparent;
+}
+
+.menta {
+	color: #00e676;
+}
+
+.icon-block {
+  padding: 0 15px;
+}
+.icon-block .material-icons {
+	font-size: inherit;
+}
+
+nav {
+	margin-bottom: 0;
+}
+
+
+#modal1 {
+	width: 25vw;
+	padding-bottom: 0;
+}
+
+.principal {
+	margin-top: 10vh;
+	min-height: 80vh;
+}
+
+.principal2 {
+	min-height: 75vh;
+}
+
+.texto{
+  font-family: 'Roboto';
+}
+
+#img{
+  width: 30rem;
+  height: 30rem;
+}
+
+#editar-perfil {
+	width: 30vw;
+}
+
+#editar-perfil input {
+	text-align: center;
+}
+
+@media screen and (max-width: 920px) {
+	#img {
+		margin-top: 2.5rem;
+		width: 90%;
+		height: 90%;
+	}
+
+	#modal1 {
+		width: 90vw;
+	}
+
+	.footer-image {
+		width: 5rem;
+	}
+
+	nav {
+		height: 10vh;
+	}
+
+	.principal {
+		margin-top: 0;
+	}
+
+	#editar-perfil {
+		width: 70vw;
+	}
+}
+
+body {
+	bottom: 0;
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+footer {
+	bottom: 0;
+	margin-bottom: 0;
+}

@@ -1,0 +1,98 @@
+
+.estrelas input[type=radio] {
+	display: none;
+}
+.estrelas label i.fa{
+	font-size: 2.5em
+}
+.estrelas label i.fa:before {
+	content:'\f005';
+	color: #FC0;
+}
+.estrelas input[type=radio]:checked ~ label i.fa:before {
+	color: #CCC;
+}
+
+.verdeIF{
+	background-color: #349A47;
+}
+.verdeIF:hover {
+	background-color: #349A47;
+}
+
+.verdeIFtexto{
+	color: #349A47;
+}
+
+.drop{
+	padding-top: 0;
+	padding-bottom: 0
+}
+
+#button-5
+{
+    perspective: 60px;
+    overflow: visible;
+}
+
+#button-5 .knobs:before, #button-5 .knobs span
+{
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 20px;
+    height: 10px;
+    color: #fff;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1;
+    padding: 9px 4px;
+    border-radius: 50%;
+    transition: 0.3s cubic-bezier(0.18, 0.89, 0.35, 1.15) all;
+}
+
+#button-5 .knobs:before
+{
+    background-color: #03A9F4;
+}
+
+#button-5 .knobs span:before
+{
+    content: 'YES';
+}
+
+#button-5 .knobs:before, #button-5 .layer
+{
+    transform: rotateY(0);
+    transform-origin: center;
+}
+
+#button-5 .checkbox:checked + .knobs:before, #button-5 .checkbox:checked + .knobs span
+{
+    left: 42px;
+}
+
+#button-5 .checkbox:checked + .knobs:before
+{
+    transform: rotateY(180deg);
+    background-color: #f44336;
+}
+
+#button-5 .checkbox:checked + .knobs span:before
+{
+    content: 'NO';
+    left: 42px;
+}
+
+#button-5 .checkbox:checked ~ .layer
+{
+    background-color: #fcebeb;
+    transform: rotateY(-180deg);
+}
+
+#button-5 .knobs, #button-5 .knobs:before, #button-5 .layer
+{
+    transition: 0.3s ease all;
+}

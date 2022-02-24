@@ -1,0 +1,472 @@
+<?php
+    include_once('autoload.php');
+    include('classes/banco.php');
+
+    $acao = isset($_POST['acao']) ? $_POST['acao'] : $_GET['acao'];
+
+    switch ($acao) {
+        case 'login':
+            $user = $_POST['usuario'];
+            $senha = $_POST['senha'];
+            logar($user, $senha);
+        break;
+        case 'logout':
+            session_start();
+            session_destroy();
+            header("location:../");
+        break;
+        case 'cadastrar':
+            cadastro();
+        break;
+        case 'alterar_dados':
+            alterar_dados();
+        break;
+        case 'alterar_senha':
+            alterar_senha();
+        break;
+        case 'excluir_adm':
+       		excluir_adm();
+       	break;
+        
+        //Professor
+
+        case 'excluir_professor':
+            excluir_professor();
+        break;
+
+        //Aluno
+
+        case 'excluir_aluno':
+            excluir_aluno();
+        break;
+
+        //Técnico Administrativo
+
+        case 'excluir_servidor':
+            excluir_servidor();
+        break;
+
+        //Turma
+
+       	case 'adicionar_turma':
+       		adicionar_turma();
+       	break;
+        case 'alterar_turma':
+            alterar_turma();
+        break;
+        case 'excluir_turma':
+            excluir_turma();
+        break;
+
+        //Disciplina
+
+        case 'adicionar_disciplina':
+            adicionar_disciplina();
+        break;
+        case 'alterar_disciplina':
+            alterar_disciplina();
+        break;
+        case 'excluir_disciplina':
+            excluir_disciplina();
+        break;
+
+        //Ocorrência
+
+        case 'adicionar_ocorrencia':
+            adicionar_ocorrencia();
+        break;
+        case 'alterar_ocorrencia':
+            alterar_ocorrencia();
+        break;
+        case 'excluir_ocorrencia':
+            excluir_ocorrencia();
+        break;
+
+        //Tipo de Ocorrência
+
+        case 'adicionar_tpOcorrencia':
+            adicionar_tpOcorrencia();
+        break;
+        case 'alterar_tpOcorrencia':
+            alterar_tpOcorrencia();
+        break;
+        case 'excluir_tpOcorrencia':
+            excluir_tpOcorrencia();
+        break;
+
+        //Situação
+
+        case 'alterar_situacao':
+            alterar_situacao();
+        break;
+
+        case 'excluir_solicitacao':
+            excluir_solicitacao();
+        break;
+        case 'aceitar_solicitacao':
+            aceitar_solicitacao();
+        break;
+        default:
+            echo 'Erro!';
+        break;
+    }
+
+    function logar($user, $senha) {
+        $usuario = isset($_POST['usuario']) ? $_POST['usuario'] : '';
+        $senha = isset($_POST['senha']) ? $_POST['senha'] : '';
+        $sql = "SELECT * FROM usuario WHERE usuario = '$user'";
+        echo "$sql <br>";
+        $banco = new banco;
+        $banco->setTabela("usuario");
+        $row = $banco->select($sql);
+        $senhaBD = "";
+        $usuario = "";
+        $nome = "";
+        if (count($row) != 0) {
+            $senhaBD = $row[0]['senha'];
+            $usuario = $row[0]['usuario'];
+            $nome = $row[0]['nome'];
+            $ocupacao = $row[0]['ocupacao'];
+            $codigo = $row[0]['codigo'];
+            if ($ocupacao == 1) {
+            	$painel = "admin";
+            }
+            elseif ($ocupacao == 2) {
+            	$painel = "professor";
+            }
+            elseif ($ocupacao == 3){
+            	$painel = "aluno";
+            }
+            else{
+                $painel = "tecAdm";
+            }
+        }
+        $senha = sha1(hash("sha512", $senha));
+        echo "$senhaBD =";
+        echo $senha;
+//        if ($senha == $senhaBD) {
+            session_start();
+            $_SESSION['usuario'] = $usuario;
+            $_SESSION['nome'] = $nome;
+            $_SESSION['codigo'] = $codigo;
+            $_SESSION['matricula'] = $matricula;
+            $_SESSION['dataNascimento'] = $dataNascimento;
+            $_SESSION['foto'] = $foto;
+            $_SESSION['ocupacao'] = $ocupacao;
+
+            header("location:$painel.php");
+ //       } else {
+        	header("location:../");
+ //       }
+    }
+
+    function alterar_turma() {
+        $tabela = isset($_POST['tabela']) ? $_POST['tabela'] : $_GET['tabela'];
+        $codigo = isset($_POST['codigo']) ? $_POST['codigo'] : $_GET['codigo'];
+        $ano = isset($_POST['ano']) ? $_POST['ano'] : $_GET['ano'];
+        $curso = isset($_POST['curso']) ? $_POST['curso'] : $_GET['curso'];
+
+		$banco = new banco;
+        $banco->setTabela($tabela);
+
+        if ($banco->updateT([$codigo, $ano, $curso], ['codigo', 'ano', 'curso'])) {
+			echo "codigo".$codigo;
+            echo "<br>ano".$ano;
+            echo "<br>curso".$curso;
+            header('location:turmas.php');
+        } else {
+            echo 'Erro!';
+        }
+    }
+
+    function alterar_disciplina() {
+        $tabela = isset($_POST['tabela']) ? $_POST['tabela'] : $_GET['tabela'];
+        $codigo = isset($_POST['codigo']) ? $_POST['codigo'] : $_GET['codigo'];
+        $nome = isset($_POST['nome']) ? $_POST['nome'] : $_GET['nome'];
+
+        $banco = new banco;
+        $banco->setTabela($tabela);
+
+        if ($banco->updateC([$codigo, $nome], ['', 'nome'])) {
+            echo "codigo".$codigo;
+            echo "<br>nome".$nome;
+            header('location:disciplinas.php');
+        } else {
+            echo 'Erro!';
+        }
+    }
+
+    function alterar_ocorrencia() {
+        $tabela = isset($_POST['tabela']) ? $_POST['tabela'] : $_GET['tabela'];
+        $codigo = isset($_POST['codigo']) ? $_POST['codigo'] : $_GET['codigo'];
+        $ano = isset($_POST['ano']) ? $_POST['ano'] : $_GET['ano'];
+
+        $banco = new banco;
+        $banco->setTabela($tabela);
+
+        if ($banco->updateTp([$codigo, $ano, $curso], ['ano', 'curso'])) {
+            echo "codigo".$codigo;
+            echo "<br>ano".$ano;
+            echo "<br>curso".$curso;
+            header('location:turmas.php');
+        } else {
+            echo 'Erro!';
+        }
+    }
+
+    function excluir_adm() {
+    	$codigo = isset($_POST['codigo']) ? $_POST['codigo'] : $_GET['codigo'];
+
+		$banco = new banco;
+		$banco->setTabela('usuario');
+
+		if ($banco->delete($codigo.'.codigo')) {
+            header('location:administradores.php');
+        } else {
+            echo 'Erro!';
+        }
+    }
+
+    function excluir_professor() {
+        $codigo = isset($_POST['codigo']) ? $_POST['codigo'] : $_GET['codigo'];
+
+        $banco = new banco;
+
+        $banco->setTabela('turma_has_professor');
+        $banco->delete($codigo.'.codigoUsuario');
+
+        $banco->setTabela('professor_has_disciplina');
+        $banco->delete($codigo.'.codigoUsuario');
+
+        $banco->setTabela('usuario');
+        if ($banco->delete($codigo.'.codigo')) {
+            header('location:professores.php');
+        } else {
+            echo 'Erro!';
+        }
+    }
+
+    function excluir_aluno() {
+        $codigo = isset($_POST['codigo']) ? $_POST['codigo'] : $_GET['codigo'];
+
+        $banco = new banco;
+        $banco->setTabela('usuario');
+
+        if ($banco->delete($codigo.'.codigo')) {
+            $banco2 = new banco;
+            $banco2->setTabela('turma_has_aluno');
+            if ($banco2->delete($codigo.'.codigoUsuario')) {
+                header('location:alunos.php');
+            }
+        } else {
+            echo 'Erro!';
+        }
+    }
+
+    function excluir_servidor() {
+        $codigo = isset($_POST['codigo']) ? $_POST['codigo'] : $_GET['codigo'];
+
+        $banco = new banco;
+        $banco->setTabela('usuario');
+
+        if ($banco->delete($codigo.'.codigo')) {
+            $banco2 = new banco;
+            $banco2->setTabela('usuario_has_profissao');
+
+            if ($banco2->delete($codigo.'.codigoUsuario')) {
+                header('location:servidor.php');
+            }
+        } else {
+            echo 'Erro!';
+        }
+    }
+
+    function adicionar_turma() {
+        $ano_turma = isset($_POST['ano'])? $_POST['ano']:$_GET['ano'];
+    	$curso_turma = isset($_POST['curso'])? $_POST['curso']:$_GET['curso'];
+
+		$banco = new banco;
+		$banco->setTabela('turma');
+		
+		if ($banco->inserir(['null', $ano_turma, $curso_turma])) {
+			$cod_turma = $banco->select("select max(codigo) from turma");
+			$codigo = $cod_turma[0][0];
+
+            header('location:turmas.php');
+
+			/*$matricula = $_SESSION['matricula'];
+
+			$banco2 = new bancoNN;
+            $banco2->setTabela('professores_has_turma');
+            if ($banco2->inserirN([$matricula, $codigo, 'null'])) {
+                header('location:turmas.php');
+            } else {
+                echo 'Erro!';
+            }*/
+		} else {
+			echo 'Erro!';
+		}
+    }
+
+    function excluir_turma() {
+        $codigo = isset($_POST['codigo'])?$_POST['codigo']:$_GET['codigo'];
+        echo $codigo."a";
+        $banco = new banco;
+        $banco->setTabela('turma_has_usuario');
+        
+        if ($banco->delete($codigo.'.codigoTurma')) {
+            $banco2 = new banco;
+            $banco2->setTabela('turma');
+            if ($banco2->delete($codigo.'.codigo')) {
+                echo $banco2->delete($codigo);
+                echo $codigo."aa";
+                header('location:turmas.php');
+            }
+        }
+        else {
+            echo 'Erro!';
+        }
+    }
+
+    //Disciplina
+
+    function adicionar_disciplina() {
+        $nome = isset($_POST['nome'])? $_POST['nome']:$_GET['nome'];
+
+        $banco = new banco;
+        $banco->setTabela('disciplina');
+        
+        if ($banco->inserir(['null', $nome])) {
+            $cod_turma = $banco->select("select max(codigo) from turma");
+            $codigo = $cod_turma[0][0];
+
+            header('location:disciplinas.php');
+
+            /*$matricula = $_SESSION['matricula'];
+
+            $banco2 = new bancoNN;
+            $banco2->setTabela('professores_has_turma');
+            if ($banco2->inserirN([$matricula, $codigo, 'null'])) {
+                header('location:turmas.php');
+            } else {
+                echo 'Erro!';
+            }*/
+        } else {
+            echo 'Erro!';
+        }
+    }
+
+    function excluir_disciplina() {
+        $codigo = isset($_POST['codigo'])?$_POST['codigo']:$_GET['codigo'];
+        echo $codigo."a";
+        $banco = new banco;
+        $banco->setTabela('usuario_has_disciplina');
+        
+        if ($banco->delete($codigo.'.codigoDisciplina')) {
+            $banco2 = new banco;
+            $banco2->setTabela('disciplina');
+            if ($banco2->delete($codigo.'.codigo')) {
+                echo $banco2->delete($codigo);
+                echo $codigo."aa";
+                header('location:disciplinas.php');
+            }
+        }
+        else {
+            echo 'Erro!';
+        }
+    }
+
+    //Tipo de Ocorrência
+
+    function adicionar_tpOcorrencia() {
+        $descricao = isset($_POST['descricao'])? $_POST['descricao']:$_GET['descricao'];
+
+        $banco = new banco;
+        $banco->setTabela('tpOcorrencia');
+        
+        if ($banco->inserir(['null', $descricao])) {
+            $cod_turma = $banco->select("select max(codigo) from tpOcorrencia");
+            $codigo = $cod_turma[0][0];
+
+            header('location:tpOcorrencias.php');
+        } 
+        else {
+            echo 'Erro!';
+        }
+    }
+
+    function alterar_tpOcorrencia() {
+        $tabela = isset($_POST['tabela']) ? $_POST['tabela'] : $_GET['tabela'];
+        $codigo = isset($_POST['codigo']) ? $_POST['codigo'] : $_GET['codigo'];
+        $descricao = isset($_POST['descricao']) ? $_POST['descricao'] : $_GET['descricao'];
+
+        $banco = new banco;
+        $banco->setTabela($tabela);
+
+        if ($banco->updateC([$codigo, $descricao], ['', 'descricao'])) {
+            echo "codigo".$codigo;
+            echo "<br>descricao".$descricao;
+            header('location:tpOcorrencias.php');
+        } else {
+            echo 'Erro!';
+        }
+    }
+
+    function excluir_tpOcorrencia() {
+        $codigo = isset($_POST['codigo'])?$_POST['codigo']:$_GET['codigo'];
+        echo $codigo."a";
+        $banco = new banco;
+        $banco->setTabela('tpOcorrencia');
+        
+        if ($banco->delete($codigo.'.codigo')) {
+            $banco2 = new banco;
+            $banco2->setTabela('tpOcorrencia');
+            header('location:tpOcorrencias.php');
+        }
+        else {
+            echo 'Erro!';
+        }
+    }   
+
+    //Situação
+
+    function alterar_situacao() {
+        $codigo = isset($_POST['codigo']) ? $_POST['codigo'] : $_GET['codigo'];
+        $situacao = isset($_POST['situacao']) ? $_POST['situacao'] : $_GET['situacao'];
+        $resolver = isset($_POST['resolver']) ? $_POST['resolver'] : 0;
+        $codigoProfessor = isset($_GET['codigoProfessor']) ? $_GET['codigoProfessor'] : 0;
+        $codigoAluno = isset($_GET['codigoAluno']) ? $_GET['codigoAluno'] : 0;
+
+        $pagina = 'verOcorrencia.php?codigoOcorrencia='.$codigo;
+
+        if ($resolver) {
+            $situacao = 3;
+            $resolucao = isset($_POST['resolucao']) ? $_POST['resolucao'] : $_GET['resolucao'];
+
+            $banco = new banco;
+            $banco->setTabela('resolucao');
+
+            if ($banco->inserir(['null', $resolucao, $codigo])) {
+                $pagina = 'ocorrencia.php';
+            } 
+            else {
+                echo 'Erro!';
+            }
+        }
+        elseif($situacao !=3){
+            $situacao = 1;
+        }
+
+        $banco = new banco;
+        $banco->setTabela('ocorrencia');
+
+        if ($banco->updateSituacao([$codigo, $situacao])) {
+            echo $banco->updateSituacao([$codigo, $situacao]);
+            echo "codigo".$codigo;
+            echo "<br>situacao".$situacao;
+            header('location:'.$pagina);
+        } else {
+            echo 'Erro!';
+        }
+    }
+?>
